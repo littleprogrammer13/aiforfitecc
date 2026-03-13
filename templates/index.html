@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zero LLM</title>
+    <style>
+        body { background: #0e1117; color: white; font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        .chat { width: 400px; background: #161b22; padding: 20px; border-radius: 10px; border: 1px solid #30363d; }
+        #output { height: 300px; overflow-y: auto; border-bottom: 1px solid #30363d; margin-bottom: 10px; padding: 10px; }
+        input { width: 70%; background: #0d1117; color: white; border: 1px solid #30363d; padding: 10px; border-radius: 5px; }
+        button { padding: 10px; background: #238636; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="chat">
+        <div id="output"><b>IA:</b> Olá! Treinado com seu TXT.</div>
+        <input type="text" id="msg" placeholder="Digite o início...">
+        <button onclick="send()">Gerar</button>
+    </div>
+
+    <script>
+        async function send() {
+            const input = document.getElementById('msg');
+            const out = document.getElementById('output');
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({msg: input.value})
+            });
+            const data = await res.json();
+            out.innerHTML += `<p><b>Você:</b> ${input.value}</p>`;
+            out.innerHTML += `<p><b>IA:</b> ${data.answer}</p>`;
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
